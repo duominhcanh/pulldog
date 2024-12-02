@@ -2,10 +2,6 @@ import { Octokit } from "@octokit/rest";
 import { PullRequestProps, ReposProps, UserProps } from "./schema";
 
 export async function listRepos(token: string): Promise<ReposProps[]> {
-  // const repoList = await (await fetch(`http://localhost:9877/repos`)).json();
-
-  // return repoList;
-
   const octokit = new Octokit({
     auth: token,
   });
@@ -27,12 +23,6 @@ export async function listPullRequests({
   owner: string;
   repo: string;
 }): Promise<PullRequestProps[]> {
-  // const repoList = await (
-  //   await fetch(`http://localhost:9877/repos?name=${repo}`)
-  // ).json();
-
-  // return repoList[0].pulls;
-
   const octokit = new Octokit({
     auth: token,
   });
@@ -46,10 +36,6 @@ export async function listPullRequests({
 }
 
 export async function getUser(token: string): Promise<UserProps | undefined> {
-  // const usersList = await (await fetch(`http://localhost:9877/users`)).json();
-
-  // return usersList[0];
-
   const octokit = new Octokit({
     auth: token,
   });

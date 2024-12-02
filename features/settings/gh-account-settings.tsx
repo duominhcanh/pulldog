@@ -1,37 +1,16 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, ButtonProps } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { getUser } from "@/lib/octokit/actions";
+import { Button } from "@/components/ui/button";
+import { Form, FormField } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 import { nanoid } from "nanoid";
-import { ReactNode, RefAttributes, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useDebounce } from "use-debounce";
 import { updateSettings } from "./actions";
+import { GhAccount } from "./gh-account";
+import { GhAccountDialog } from "./gh-account-dialog";
 import { SettingsProps, settingsSchema } from "./schema";
 
 export function GhAccountSettings({
@@ -64,166 +43,72 @@ export function GhAccountSettings({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-6 w-2/3 space-y-6"
+        className="mt-4 w-2/3 space-y-6"
       >
         <FormField
           control={form.control}
           name="ghAccounts"
           render={({ field }) => (
-            <FormItem>
-              <div className="space-y-2">
-                {field.value.map((account, index) => (
-                  <div key={index}>
-                    <div className="flex flex-row items-center gap-2">
-                      <GhAccount
-                        token={account.token}
-                        actions={
-                          <div className="flex flex-row gap-3">
-                            <GhAccountInput
-                              defaultValue={account.token}
-                              onSubmit={(token) =>
-                                field.onChange([
-                                  ...field.value,
-                                  { id: nanoid(), token },
-                                ])
-                              }
-                              dialogTriggerProps={{
-                                type: "button",
-                                variant: "link",
-                                className: "p-0",
-                                children: "Edit",
-                              }}
-                            />
-                            <Button
-                              variant="link"
-                              className="p-0 text-destructive"
-                              onClick={() => {
-                                const newTokens = field.value.filter(
-                                  (_, i) => i !== index,
-                                );
-                                field.onChange(newTokens);
-                              }}
-                            >
-                              Remove
-                            </Button>
+            <div>
+              {field.value.map((account, index) => (
+                <div key={index}>
+                  <div className="flex flex-row items-center gap-2">
+                    <GhAccountDialog
+                      dialogTitle="Edit account"
+                      dialogDescription="Edit the details of this account"
+                      defaultToken={account.token}
+                      onSubmitToken={(token) =>
+                        field.onChange([
+                          ...field.value,
+                          { id: nanoid(), token },
+                        ])
+                      }
+                      onRemoveToken={() => {
+                        const newTokens = field.value.filter(
+                          (_, i) => i !== index,
+                        );
+                        field.onChange(newTokens);
+                      }}
+                      dialogTrigger={
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="-mx-3 my-1 flex min-w-80 justify-start !px-3 !py-8"
+                        >
+                          <div className="flex flex-row items-center gap-2">
+                            <GhAccount token={account.token} />
                           </div>
-                        }
-                      />
-                    </div>
-
-                    <FormMessage className="mt-1">
-                      {form.formState.errors.ghAccounts?.[index]?.message}
-                    </FormMessage>
+                        </Button>
+                      }
+                      submitButtonText="Save Changes"
+                      showRemoveButton
+                    />
                   </div>
-                ))}
-                <GhAccountInput
-                  onSubmit={(token) =>
+                </div>
+              ))}
+              <div className="mt-2">
+                <GhAccountDialog
+                  dialogTitle="Add Account"
+                  dialogDescription="Add a new GitHub account to your profile"
+                  onSubmitToken={(token) =>
                     field.onChange([...field.value, { id: nanoid(), token }])
                   }
+                  dialogTrigger={
+                    <Button type="button" variant="ghost" className="-mx-3">
+                      <Plus className="h-4 w-4 stroke-green-500" />
+                      Add Account
+                    </Button>
+                  }
+                  submitButtonText="Add Token"
                 />
               </div>
-            </FormItem>
+            </div>
           )}
         />
         <Button type="submit" disabled={isPending}>
-          Save
+          Save Changes
         </Button>
       </form>
     </Form>
   );
 }
-
-const GhAccountInput = ({
-  defaultValue,
-  onSubmit = () => {},
-  dialogTriggerProps = {
-    type: "button",
-    variant: "secondary",
-    children: "Add Account",
-  },
-}: {
-  defaultValue?: string;
-  onSubmit?: (token: string) => void;
-  dialogTriggerProps?: ButtonProps & RefAttributes<HTMLButtonElement>;
-}) => {
-  const [token, setToken] = useState(defaultValue);
-  const [debouncedToken] = useDebounce(token, 500);
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button {...dialogTriggerProps} onClick={() => setIsOpen(true)}>
-          {dialogTriggerProps.children}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DialogDescription>
-        </DialogHeader>
-
-        <GhAccount token={debouncedToken} />
-
-        <div className="grid gap-4">
-          <Label htmlFor="name">Token</Label>
-          <Textarea
-            id="name"
-            placeholder="GitHub Token"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
-        </div>
-        <DialogFooter>
-          <Button
-            type="button"
-            onClick={() => {
-              onSubmit(token ?? "");
-              setIsOpen(false);
-            }}
-          >
-            Add Token
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-const GhAccount = ({
-  token,
-  actions,
-}: {
-  token?: string;
-  actions?: React.ReactNode;
-}) => {
-  const { data } = useQuery({
-    queryKey: [getUser, token],
-    queryFn: () => getUser(token ?? ""),
-    enabled: !!token,
-  });
-
-  const account = {
-    login: data?.login,
-    avatar_url: data?.avatar_url,
-    name: data?.name,
-  };
-
-  return (
-    <div className="flex flex-row items-start gap-3">
-      <Avatar className="h-10 w-10">
-        <AvatarImage src={account.avatar_url} />
-        <AvatarFallback>{account.name ?? "?"}</AvatarFallback>
-      </Avatar>
-      <div className="-mt-1 flex flex-col items-start">
-        <span className="font-medium">{account.name ?? "\u200b"}</span>
-        <span className="text-sm text-muted-foreground">
-          {account.login ?? "\u200b"}
-        </span>
-        {actions}
-      </div>
-    </div>
-  );
-};
