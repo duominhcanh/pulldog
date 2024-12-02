@@ -62,6 +62,7 @@ export async function updateSettings(
 
   cookieStore.set(CookieKey.Settings, JSON.stringify(updatedSettings), {
     secure: true,
+    maxAge: 100 * 365 * 24 * 60 * 60, // 100 years in seconds
   });
 
   return { success: true };
