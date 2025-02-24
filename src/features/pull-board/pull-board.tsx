@@ -40,7 +40,7 @@ export const PullBoard = ({
   }
 
   return (
-    <div className="grid h-screen overflow-auto">
+    <div className="grid h-screen grid-rows-[auto_1fr] overflow-auto">
       <nav className="border-border bg-body supports-[backdrop-filter]:bg-body/60 sticky top-0 z-50 border-b border-dashed backdrop-blur">
         <div className="mx-auto flex h-14 max-w-screen-xl flex-row justify-between p-3">
           <Link href={"/"} className="mr-4 flex items-center space-x-2 lg:mr-6">
@@ -58,7 +58,7 @@ export const PullBoard = ({
         <ScrollArea
           component="aside"
           type="scroll"
-          className="border-border sticky top-14 h-[calc(100vh-3.5rem)] w-80 overflow-auto border-r border-dashed p-3"
+          className="border-border sticky top-14 h-[calc(100vh-3.55rem)] w-80 overflow-auto border-r border-dashed p-3"
         >
           <FiltersForm initialValues={filters} />
 
