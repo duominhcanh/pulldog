@@ -26,7 +26,12 @@ export type GitPullRequest = {
 
 export interface GitProvider {
   getCurrentUser(token: string): Promise<GitUser | null>;
-  listRepos(token: string): Promise<GitRepository[]>;
+  listRepos(request: {
+    token: string;
+    options: {
+      starred: boolean;
+    };
+  }): Promise<GitRepository[]>;
   listPullRequests({
     token,
     owner,

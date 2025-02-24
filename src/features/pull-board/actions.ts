@@ -16,7 +16,10 @@ export async function getPullBoardData(): Promise<BoardData> {
   for (const account of accounts) {
     const provider = getProvider(account.provider);
 
-    const repos = await provider.listRepos(account.token);
+    const repos = await provider.listRepos({
+      token: account.token,
+      options: { starred: true },
+    });
 
     const pullsPromises = repos.map(async (repo) => {
       const pulls = await provider.listPullRequests({

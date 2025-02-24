@@ -31,7 +31,10 @@ export const gitlab: GitProvider = {
 
     return gitUser;
   },
-  listRepos: async function (token: string): Promise<GitRepository[]> {
+  listRepos: async function ({
+    token,
+    options: { starred = false },
+  }): Promise<GitRepository[]> {
     // https://docs.gitlab.com/api/projects/#list-projects
     const response = await axios.get<GitlabProject[]>(
       "https://gitlab.com/api/v4/projects",
@@ -41,7 +44,7 @@ export const gitlab: GitProvider = {
           membership: true,
           simple: true,
           archived: false,
-          starred: true,
+          starred: starred,
         },
       },
     );

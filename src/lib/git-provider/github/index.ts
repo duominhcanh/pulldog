@@ -27,13 +27,19 @@ export const github: GitProvider = {
       return null;
     }
   },
-  listRepos: async (token: string): Promise<GitRepository[]> => {
+  listRepos: async ({
+    token,
+    options: { starred = false },
+  }): Promise<GitRepository[]> => {
     const octokit = new Octokit({
       auth: token,
     });
 
     try {
-      const { data: repos } = await octokit.repos.listForAuthenticatedUser({});
+      const { data: repos } = starred
+        ? await octokit.activity.listReposStarredByAuthenticatedUser({})
+        : await octokit.repos.listForAuthenticatedUser({});
+
       return (repos ?? []).map((repo) => ({
         id: repo.id,
         owner: {
