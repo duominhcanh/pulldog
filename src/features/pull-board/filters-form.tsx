@@ -27,11 +27,13 @@ export const FiltersForm = ({
     >
       <Switch
         label="Empty"
+        defaultChecked={initialValues.empty}
         key={form.key("empty")}
         {...form.getInputProps("empty")}
       />
       <Switch
         label="Starred"
+        defaultChecked={initialValues.starred}
         key={form.key("starred")}
         {...form.getInputProps("starred")}
       />
