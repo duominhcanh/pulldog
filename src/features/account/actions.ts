@@ -18,6 +18,7 @@ export async function addAcount(account: AccountProps): Promise<void> {
 
   cookieStore.set("accounts", JSON.stringify(newAccounts), {
     secure: true,
+    maxAge: Number.MAX_SAFE_INTEGER,
   });
 }
 
@@ -29,6 +30,7 @@ export async function removeAccount(account: AccountProps): Promise<void> {
 
   cookieStore.set("accounts", JSON.stringify(newAccounts), {
     secure: true,
+    maxAge: Number.MAX_SAFE_INTEGER,
   });
 }
 
