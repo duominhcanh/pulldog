@@ -11,7 +11,7 @@ export default async function Page() {
 
   return (
     <div className="min-h-screen">
-      <nav className="sticky top-0 mx-auto flex max-w-screen-lg flex-row items-center gap-3 p-3">
+      <nav className="sticky top-0 mx-auto flex max-w-screen-xl flex-row items-center gap-3 p-3">
         <ActionIcon
           component={Link}
           href="/"
@@ -24,7 +24,7 @@ export default async function Page() {
         </ActionIcon>
         <Title order={2}>Settings</Title>
       </nav>
-      <div className="mx-auto max-w-screen-lg space-y-8 p-3 pl-17">
+      <div className="mx-auto max-w-screen-xl space-y-8 p-3 pl-17">
         <div className="flex flex-col gap-2">
           <Title order={3}>Theme</Title>
           <ThemePicker />
