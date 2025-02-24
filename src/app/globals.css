@@ -1,0 +1,16 @@
+@import "@mantine/core/styles.css";
+@import "tailwindcss";
+
+@config "../../tailwind.config.ts";
+
+:root[data-mantine-color-scheme="dark"] {
+  --mantine-color-body: #121212;
+}
+
+@theme {
+  --color-body: var(--mantine-color-body);
+  --color-text: var(--mantine-color-text);
+  --color-border: var(--mantine-color-default-border);
+  --color-red-text: var(--mantine-color-red-text);
+  --color-teal-text: var(--mantine-color-teal-text);
+}
