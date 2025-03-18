@@ -2,13 +2,21 @@ import { GitPullRequest } from "@/lib/git-provider";
 import { ActionIcon, ScrollArea } from "@mantine/core";
 import clsx from "clsx";
 import groupBy from "lodash.groupby";
-import { PawPrint, Settings2 } from "lucide-react";
+import { PawPrint, Settings, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { FiltersForm } from "./filters-form";
 import { NoPullRequests, PullRequest } from "./pull-request";
 import { Repository } from "./repository";
 import { BoardData, BoardFilters } from "./schema";
+import {
+  PageColumn,
+  PageContent,
+  PageHeader,
+  PageRoot,
+  PageRow,
+  PageTitle,
+} from "@/lib/ui/page";
 
 export const PullBoard = ({
   repositories,
@@ -36,30 +44,49 @@ export const PullBoard = ({
   }, [repositories]);
 
   if (!hasData) {
-    return <EmptyBoard />;
+    return (
+      <PageRoot>
+        <PageHeader fullWidth className="grid-cols-[auto_1fr_auto] gap-2">
+          <PageColumn element={PawPrint} strokeWidth={3} size={18} />
+          <PageTitle>pulldog</PageTitle>
+          <PageColumn
+            element={ActionIcon}
+            component={Link}
+            href="/settings"
+            variant="subtle"
+            size="xl"
+            color="gray"
+            radius="xl"
+          >
+            <Settings strokeWidth={3} size={18} />
+          </PageColumn>
+        </PageHeader>
+        <PageContent>
+          <NoPullRequests className="ml-2" />
+        </PageContent>
+      </PageRoot>
+    );
   }
 
   return (
-    <div className="grid h-screen grid-rows-[auto_1fr] overflow-auto">
-      <nav className="border-border bg-body supports-[backdrop-filter]:bg-body/60 sticky top-0 z-50 border-b border-dashed backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-screen-xl flex-row justify-between p-3">
-          <Link href={"/"} className="mr-4 flex items-center space-x-2 lg:mr-6">
-            <PawPrint className="scale-x-[-1]" />
-            <span className="hidden font-bold lg:inline-block">pulldog</span>
-          </Link>
-          <Link href={"/settings"}>
-            <ActionIcon variant="subtle" color="gray" size="lg" radius="xl">
-              <Settings2 size={16} />
-            </ActionIcon>
-          </Link>
-        </div>
-      </nav>
-      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-[auto_1fr]">
-        <ScrollArea
-          component="aside"
-          type="scroll"
-          className="border-border sticky top-14 h-[calc(100vh-3.55rem)] w-80 overflow-auto border-r border-dashed p-3"
+    <PageRoot>
+      <PageHeader fullWidth className="grid-cols-[auto_1fr_auto] gap-2">
+        <PageColumn element={PawPrint} strokeWidth={3} size={18} />
+        <PageTitle>pulldog</PageTitle>
+        <PageColumn
+          element={ActionIcon}
+          component={Link}
+          href="/settings"
+          variant="subtle"
+          size="xl"
+          color="gray"
+          radius="xl"
         >
+          <Settings strokeWidth={3} size={18} />
+        </PageColumn>
+      </PageHeader>
+      <PageContent className="mx-auto grid w-full max-w-screen-xl grid-cols-[auto_1fr] gap-3 pr-2.75 pl-1">
+        <nav className="w-70">
           <FiltersForm initialValues={filters} />
 
           <ul className="mt-8">
@@ -84,8 +111,8 @@ export const PullBoard = ({
               </div>
             ))}
           </ul>
-        </ScrollArea>
-        <main className="p-3">
+        </nav>
+        <main>
           {repositories.map((repo) => (
             <div key={repo.id} className={clsx("mb-12 rounded-md")}>
               <div className="relative top-[-4.2rem]" id={"repo-" + repo.id} />
@@ -102,17 +129,7 @@ export const PullBoard = ({
             </div>
           ))}
         </main>
-      </div>
-    </div>
-  );
-};
-
-const EmptyBoard = () => {
-  return (
-    <main className="mx-auto flex w-full max-w-screen-xl flex-row gap-10 md:px-8">
-      <div className="flex flex-row gap-2">
-        <NoPullRequests className="mt-8" />
-      </div>
-    </main>
+      </PageContent>
+    </PageRoot>
   );
 };

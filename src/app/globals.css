@@ -1,16 +1,60 @@
-@import "@mantine/core/styles.css";
+@layer theme, base, components, mantine, utilities;
+
 @import "tailwindcss";
 
-@config "../../tailwind.config.ts";
-
-:root[data-mantine-color-scheme="dark"] {
-  --mantine-color-body: #121212;
+@layer mantine {
+  @import "@mantine/core/styles.layer.css";
 }
 
 @theme {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --spacing-xs: var(--mantine-spacing-xs);
+  --spacing-sm: var(--mantine-spacing-sm);
+  --spacing-md: var(--mantine-spacing-md);
+  --spacing-lg: var(--mantine-spacing-lg);
+  --spacing-xl: var(--mantine-spacing-xl);
+
+  --color-primary-0: var(--mantine-primary-color-0);
+  --color-primary-1: var(--mantine-primary-color-1);
+  --color-primary-2: var(--mantine-primary-color-2);
+  --color-primary-3: var(--mantine-primary-color-3);
+  --color-primary-4: var(--mantine-primary-color-4);
+  --color-primary-5: var(--mantine-primary-color-5);
+  --color-primary-6: var(--mantine-primary-color-6);
+  --color-primary-7: var(--mantine-primary-color-7);
+  --color-primary-8: var(--mantine-primary-color-8);
+  --color-primary-9: var(--mantine-primary-color-9);
+
   --color-body: var(--mantine-color-body);
-  --color-text: var(--mantine-color-text);
-  --color-border: var(--mantine-color-default-border);
-  --color-red-text: var(--mantine-color-red-text);
-  --color-teal-text: var(--mantine-color-teal-text);
+  --color-default-border: var(--mantine-color-default-border);
+}
+
+@layer base {
+  * {
+    @apply border-default-border;
+  }
+}
+
+@layer components {
+  .page-header {
+    @apply bg-body sticky top-0 z-10 grid w-full max-w-screen-md grid-cols-[3.25rem_1fr_auto] items-center p-2;
+  }
+
+  .page-content {
+    @apply pt-4;
+  }
+
+  .page-row {
+    @apply grid w-full max-w-screen-md items-center px-2 pt-4;
+  }
+
+  .page-row.rows-2 {
+    @apply grid-cols-[3.25rem_1fr];
+  }
+
+  .page-row.rows-3 {
+    @apply grid-cols-[3.25rem_1fr_auto];
+  }
 }

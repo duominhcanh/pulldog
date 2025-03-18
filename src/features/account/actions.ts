@@ -5,7 +5,7 @@ import { getProvider, GitUser } from "@/lib/git-provider";
 import { cookies } from "next/headers";
 import { AccountProps, accountsCookieSchema } from "./schema";
 
-export async function addAcount(account: AccountProps): Promise<void> {
+const addAccount = async (account: AccountProps): Promise<void> => {
   const cookieStore = await cookies();
   const accounts = await getAccounts();
 
@@ -20,9 +20,9 @@ export async function addAcount(account: AccountProps): Promise<void> {
     secure: true,
     maxAge: Number.MAX_SAFE_INTEGER,
   });
-}
+};
 
-export async function removeAccount(account: AccountProps): Promise<void> {
+const removeAccount = async (account: AccountProps): Promise<void> => {
   const cookieStore = await cookies();
   const accounts = await getAccounts();
 
@@ -32,9 +32,9 @@ export async function removeAccount(account: AccountProps): Promise<void> {
     secure: true,
     maxAge: Number.MAX_SAFE_INTEGER,
   });
-}
+};
 
-export async function getAccounts(): Promise<AccountProps[]> {
+const getAccounts = async (): Promise<AccountProps[]> => {
   const cookieStore = await cookies();
 
   if (!cookieStore.has("accounts")) {
@@ -45,16 +45,18 @@ export async function getAccounts(): Promise<AccountProps[]> {
   const accounts = accountsCookieSchema.parse(JSON.parse(cookie!.value));
 
   return accounts;
-}
+};
 
-export async function getUser({
+const getUser = async ({
   account,
 }: {
   account: AccountProps;
-}): Promise<GitUser | null> {
+}): Promise<GitUser | null> => {
   const token = account.secured ? decrypt(account.token) : account.token;
 
   const user = await getProvider(account.provider).getCurrentUser(token);
 
   return user;
-}
+};
+
+export { addAccount, getAccounts, getUser, removeAccount };

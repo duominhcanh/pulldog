@@ -1,15 +1,24 @@
 import { GitUser } from "@/lib/git-provider";
 import { z } from "zod";
 
-export const accountFormSchema = z.object({
-  token: z.string(),
-  provider: z.enum(["github", "gitlab"]),
+const accountFormSchema = z.object({
+  token: z.string().min(1, { message: "This field is required" }),
+  provider: z.enum(["github", "gitlab"], {
+    errorMap: () => ({ message: "Invalid provider" }),
+  }),
 });
 
-export const accountsCookieSchema = z.array(accountFormSchema);
+const accountsCookieSchema = z.array(accountFormSchema);
 
-export type AccountMutationProps = z.infer<typeof accountFormSchema>;
+type AccountFormValues = z.infer<typeof accountFormSchema>;
 
-export type AccountProps = AccountMutationProps & {
+type AccountProps = AccountFormValues & {
   secured?: boolean;
 } & GitUser;
+
+export {
+  type AccountFormValues,
+  type AccountProps,
+  accountFormSchema,
+  accountsCookieSchema,
+};

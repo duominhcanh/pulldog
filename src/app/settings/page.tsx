@@ -1,42 +1,53 @@
-import { AccountList } from "@/features/account/account-list";
-import { getAccounts } from "@/features/account/actions";
-import { AddAccountModalTrigger } from "@/features/account/add-account-modal";
-import { ThemePicker } from "@/lib/theme/theme-picker";
-import { ActionIcon, Title } from "@mantine/core";
-import { ArrowLeft } from "lucide-react";
+import { BackIcon } from "@/lib/ui/navigation";
+import {
+  PageColumn,
+  PageContent,
+  PageHeader,
+  PageRoot,
+  PageRow,
+  PageTitle,
+} from "@/lib/ui/page";
+import { Text } from "@mantine/core";
+import { Component, UserRound } from "lucide-react";
 import Link from "next/link";
 
-export default async function Page() {
-  const accounts = await getAccounts();
-
+export default function Page() {
   return (
-    <div className="min-h-screen">
-      <nav className="sticky top-0 mx-auto flex max-w-screen-xl flex-row items-center gap-3 p-3">
-        <ActionIcon
-          component={Link}
-          href="/"
-          variant="subtle"
-          size="xl"
-          color="gray"
-          radius="xl"
+    <PageRoot>
+      <PageHeader>
+        <PageColumn element={BackIcon} href="/" />
+        <PageTitle>Settings</PageTitle>
+      </PageHeader>
+      <PageContent>
+        <PageRow
+          element={Link}
+          href="/settings/general"
+          className="last:[&_.item-content]:border-transparent"
         >
-          <ArrowLeft strokeWidth={2.5} />
-        </ActionIcon>
-        <Title order={2}>Settings</Title>
-      </nav>
-      <div className="mx-auto max-w-screen-xl space-y-8 p-3 pl-17">
-        <div className="flex flex-col gap-2">
-          <Title order={3}>Theme</Title>
-          <ThemePicker />
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row items-center justify-between">
-            <Title order={3}>Accounts</Title>
-            <AddAccountModalTrigger />
+          <div className="overflow-hidden border-b border-transparent pb-4">
+            <Component className="mt-2 ml-2" size={20} />
           </div>
-          <AccountList accounts={accounts} />
-        </div>
-      </div>
-    </div>
+          <div className="item-content grid grid-cols-1 gap-3 border-b pb-4">
+            <Text size="sm" fw={600} className="mt-2">
+              General
+            </Text>
+          </div>
+        </PageRow>
+        <PageRow
+          element={Link}
+          href="/settings/accounts"
+          className="last:[&_.item-content]:border-transparent"
+        >
+          <div className="overflow-hidden border-b border-transparent pb-4">
+            <UserRound className="mt-2 ml-2" size={20} />
+          </div>
+          <div className="item-content grid grid-cols-1 gap-3 border-b pb-4">
+            <Text size="sm" fw={600} className="mt-2">
+              Accounts
+            </Text>
+          </div>
+        </PageRow>
+      </PageContent>
+    </PageRoot>
   );
 }

@@ -1,61 +1,59 @@
 "use client";
 
 import { Avatar, Text } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
-import { Github, Gitlab } from "lucide-react";
+import clsx from "clsx";
 import Link from "next/link";
-import { useMemo } from "react";
 import { AccountProps } from "./schema";
-import { getUser } from "./actions";
-
-function ensureVisible(src: string | undefined) {
-  return src ? src : "‎";
-}
+import { UserQuery } from "./user-query";
 
 export const AccountPreview = ({
-  account: propsAccount,
+  account,
+  className,
 }: {
-  account: AccountProps;
+  account?: AccountProps;
+  className?: string;
 }) => {
-  const { data } = useQuery({
-    queryKey: ["loadAccount", propsAccount.provider, propsAccount.token],
-    queryFn: () =>
-      getUser({
-        account: propsAccount,
-      }),
-    enabled: !!propsAccount.token,
-  });
-
-  const account = useMemo(
-    () => ({
-      ...propsAccount,
-      name: ensureVisible(data?.name),
-      login: ensureVisible(data?.login),
-      avatarUrl: data?.avatarUrl,
-      webUrl: data?.webUrl,
-    }),
-    [data, propsAccount],
-  );
-
   return (
-    <>
-      <Avatar src={account.avatarUrl} className="mt-1" />
-      <div>
-        <Text fw={600}>{account.name}</Text>
-        <Link
-          href={account.webUrl || "#"}
-          target="_blank"
-          className="flex flex-row items-center gap-2"
-        >
-          {account.provider === "github" ? (
-            <Github size={14} strokeWidth={3} />
-          ) : (
-            <Gitlab size={14} strokeWidth={3} />
-          )}
+    <UserQuery account={account}>
+      {({ user }) => {
+        if (!user) {
+          return (
+            <div className={clsx("grid grid-cols-[auto_1fr] gap-2", className)}>
+              <Avatar variant="light" radius="xl" color="gray">
+                ?
+              </Avatar>
+              <div className="my-auto">
+                <Text size="sm" fw={700}>
+                  Unknown user
+                </Text>
+                <Text size="sm">user@email.com</Text>
+              </div>
+            </div>
+          );
+        }
 
-          <Text component="span">{account.login}</Text>
-        </Link>
-      </div>
-    </>
+        return (
+          <div className={clsx("grid grid-cols-[auto_1fr] gap-2", className)}>
+            <Avatar
+              variant="light"
+              radius="xl"
+              color="gray"
+              src={user.avatarUrl}
+              className="my-auto"
+            >
+              ?
+            </Avatar>
+            <div className="my-auto">
+              <Text size="sm" fw={700}>
+                {user.name}
+              </Text>
+              <Text size="sm" component={Link} href={user.webUrl || "#"}>
+                {user.login}
+              </Text>
+            </div>
+          </div>
+        );
+      }}
+    </UserQuery>
   );
 };
