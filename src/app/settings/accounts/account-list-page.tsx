@@ -11,8 +11,8 @@ import {
   PageRow,
   PageTitle,
 } from "@/lib/ui/page";
-import { ActionIcon, Avatar, Text, Title } from "@mantine/core";
-import { ArrowLeft, Plus, X } from "lucide-react";
+import { ActionIcon, Avatar, Text } from "@mantine/core";
+import { Plus, X } from "lucide-react";
 import Link from "next/link";
 
 export const AccountListPage = ({

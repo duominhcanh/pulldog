@@ -15,7 +15,7 @@ import {
   PageRow,
   PageTitle,
 } from "@/lib/ui/page";
-import { Button, Card, Select, Textarea, Title } from "@mantine/core";
+import { Button, Card, Select, Textarea } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMutation } from "@tanstack/react-query";
 import { KeyRound, Router } from "lucide-react";

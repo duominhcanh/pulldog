@@ -1,22 +1,21 @@
 import { GitPullRequest } from "@/lib/git-provider";
-import { ActionIcon, ScrollArea } from "@mantine/core";
+import {
+  PageColumn,
+  PageContent,
+  PageHeader,
+  PageRoot,
+  PageTitle,
+} from "@/lib/ui/page";
+import { ActionIcon } from "@mantine/core";
 import clsx from "clsx";
 import groupBy from "lodash.groupby";
-import { PawPrint, Settings, Settings2 } from "lucide-react";
+import { PawPrint, Settings } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { FiltersForm } from "./filters-form";
 import { NoPullRequests, PullRequest } from "./pull-request";
 import { Repository } from "./repository";
 import { BoardData, BoardFilters } from "./schema";
-import {
-  PageColumn,
-  PageContent,
-  PageHeader,
-  PageRoot,
-  PageRow,
-  PageTitle,
-} from "@/lib/ui/page";
 
 export const PullBoard = ({
   repositories,

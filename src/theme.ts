@@ -1,4 +1,4 @@
-import { ActionIcon, createTheme } from "@mantine/core";
+import { createTheme } from "@mantine/core";
 import { Geist_Mono, Poppins } from "next/font/google";
 
 export const fontSans = Poppins({

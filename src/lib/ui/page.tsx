@@ -1,14 +1,8 @@
 import { Title } from "@mantine/core";
 import clsx from "clsx";
-import {
-  createElement,
-  ElementType,
-  JSX,
-  ReactElement,
-  ReactNode,
-} from "react";
+import { createElement, ElementType, ReactElement, ReactNode } from "react";
 
-const PageRoot = <P extends {} = {}>({
+const PageRoot = <P extends object = object>({
   element = "div",
   children,
   className,
@@ -28,7 +22,7 @@ const PageRoot = <P extends {} = {}>({
   );
 };
 
-const PageHeader = <P extends {} = {}>({
+const PageHeader = <P extends object = object>({
   element = "nav",
   children,
   className,
@@ -59,7 +53,7 @@ const PageHeader = <P extends {} = {}>({
   );
 };
 
-const PageContent = <P extends {} = {}>({
+const PageContent = <P extends object = object>({
   element = "main",
   children,
   className,
@@ -81,7 +75,7 @@ const PageContent = <P extends {} = {}>({
   );
 };
 
-const PageRow = <P extends {} = {}>({
+const PageRow = <P extends object = object>({
   element = "div",
   children,
   className,
@@ -118,17 +112,15 @@ const PageTitle = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const PageColumn = <P extends {} = {}>({
+const PageColumn = <P extends object = object>({
   element = "div",
   children,
   className,
-  rows = 2,
   ...props
 }: {
   element?: ElementType;
   children?: ReactNode;
   className?: string;
-  rows?: 2 | 3;
 } & P): ReactElement => {
   return createElement(
     element,
@@ -140,4 +132,4 @@ const PageColumn = <P extends {} = {}>({
   );
 };
 
-export { PageRoot, PageHeader, PageRow, PageContent, PageTitle, PageColumn };
+export { PageColumn, PageContent, PageHeader, PageRoot, PageRow, PageTitle };
