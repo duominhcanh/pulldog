@@ -19,15 +19,11 @@ export default function Page() {
         <PageTitle>Settings</PageTitle>
       </PageHeader>
       <PageContent>
-        <PageRow
-          element={Link}
-          href="/settings/general"
-          className="last:[&_.item-content]:border-transparent"
-        >
-          <div className="overflow-hidden border-b border-transparent pb-4">
+        <PageRow element={Link} href="/settings/general">
+          <div className="overflow-hidden pb-4">
             <Component className="mt-2 ml-2" size={20} />
           </div>
-          <div className="item-content grid grid-cols-1 gap-3 border-b pb-4">
+          <div className="item-content grid grid-cols-1 gap-3 pb-4">
             <Text size="sm" fw={600} className="mt-2">
               General
             </Text>
@@ -38,10 +34,10 @@ export default function Page() {
           href="/settings/accounts"
           className="last:[&_.item-content]:border-transparent"
         >
-          <div className="overflow-hidden border-b border-transparent pb-4">
+          <div className="overflow-hidden pb-4">
             <UserRound className="mt-2 ml-2" size={20} />
           </div>
-          <div className="item-content grid grid-cols-1 gap-3 border-b pb-4">
+          <div className="item-content grid grid-cols-1 gap-3 pb-4">
             <Text size="sm" fw={600} className="mt-2">
               Accounts
             </Text>

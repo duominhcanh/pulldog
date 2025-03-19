@@ -49,23 +49,17 @@ export const AccountListPage = ({
 
 const ListItem = ({ account }: { account: AccountProps }) => {
   return (
-    <PageRow
-      rows={3}
-      element="li"
-      className="last:[&_.item-content]:border-transparent"
-    >
-      <div className="border-b border-transparent">
-        <Avatar
-          variant="light"
-          radius="xl"
-          color="gray"
-          src={account.avatarUrl}
-          className="-mt-4.5"
-        >
-          ?
-        </Avatar>
-      </div>
-      <div className="item-content grid grid-cols-[1fr_auto] gap-3 border-b pb-4">
+    <PageRow rows={3} element="li">
+      <Avatar
+        variant="light"
+        radius="xl"
+        color="gray"
+        src={account.avatarUrl}
+        className="-mt-4.5 ml-0.5"
+      >
+        ?
+      </Avatar>
+      <div className="item-content grid grid-cols-[1fr_auto] gap-3 pb-4">
         <div className="flex flex-col">
           <Text size="sm" fw={600}>
             {account.name}

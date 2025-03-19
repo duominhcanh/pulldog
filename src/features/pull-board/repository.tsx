@@ -3,10 +3,10 @@ import { Anchor, Avatar, Breadcrumbs } from "@mantine/core";
 
 export const Repository = ({ repo }: { repo: GitRepository }) => {
   return (
-    <Breadcrumbs>
+    <Breadcrumbs separator="›">
       <Anchor
         href={repo.owner?.webUrl}
-        className="flex flex-row items-center gap-2"
+        className="flex flex-row items-center gap-2 text-(--text-color)"
       >
         <Avatar
           src={repo.owner?.avatarUrl}
@@ -18,7 +18,9 @@ export const Repository = ({ repo }: { repo: GitRepository }) => {
         </Avatar>
         <span>{repo.owner?.login}</span>
       </Anchor>
-      <Anchor href={repo.webUrl}>{repo.name}</Anchor>
+      <Anchor href={repo.webUrl} className="text-(--text-color)">
+        {repo.name}
+      </Anchor>
     </Breadcrumbs>
   );
 };

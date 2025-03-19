@@ -36,25 +36,3 @@
     @apply border-default-border;
   }
 }
-
-@layer components {
-  .page-header {
-    @apply bg-body sticky top-0 z-10 grid w-full max-w-screen-md grid-cols-[3.25rem_1fr_auto] items-center p-2;
-  }
-
-  .page-content {
-    @apply pt-4;
-  }
-
-  .page-row {
-    @apply grid w-full max-w-screen-md items-center px-2 pt-4;
-  }
-
-  .page-row.rows-2 {
-    @apply grid-cols-[3.25rem_1fr];
-  }
-
-  .page-row.rows-3 {
-    @apply grid-cols-[3.25rem_1fr_auto];
-  }
-}
