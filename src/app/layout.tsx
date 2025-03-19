@@ -3,6 +3,7 @@ import {
   ColorSchemeScript,
   mantineHtmlProps,
   MantineProvider,
+  ScrollArea,
 } from "@mantine/core";
 import clsx from "clsx";
 import { defaultColorScheme, fontMono, fontSans, theme } from "@/theme";
@@ -37,7 +38,7 @@ export default function RootLayout({
             defaultColorScheme={defaultColorScheme}
             theme={theme}
           >
-            {children}
+            <ScrollArea className="h-screen">{children}</ScrollArea>
           </MantineProvider>
         </ReactQueryProvider>
       </body>
