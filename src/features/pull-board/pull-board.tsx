@@ -1,3 +1,5 @@
+"use client";
+
 import { GitPullRequest } from "@/lib/git-provider";
 import {
   PageColumn,
@@ -41,6 +43,17 @@ export const PullBoard = ({
       repos: grouped[owner].sort((a, b) => a.name!.localeCompare(b.name!)),
     }));
   }, [repositories]);
+
+  const handleRepoNavClick = (repoId: string | number) => {
+    const element = document.getElementById("repo-" + repoId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+  };
 
   if (!hasData) {
     return (
@@ -98,6 +111,11 @@ export const PullBoard = ({
                 <div className="grid grid-flow-row auto-rows-max text-sm">
                   {owner.repos.map((repo) => (
                     <button
+                      onClick={() =>
+                        handleRepoNavClick(
+                          repo.id as unknown as string | number,
+                        )
+                      }
                       key={repo.id}
                       className={clsx(
                         "text-muted-foreground flex w-full items-center rounded-md border border-transparent py-1 hover:underline",
