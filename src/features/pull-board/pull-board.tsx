@@ -13,7 +13,7 @@ import clsx from "clsx";
 import groupBy from "lodash.groupby";
 import { PawPrint, Settings } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { FiltersForm } from "./filters-form";
 import { NoPullRequests, PullRequest } from "./pull-request";
 import { Repository } from "./repository";
@@ -24,6 +24,7 @@ export const PullBoard = ({
   filters,
 }: BoardData & { filters: BoardFilters }) => {
   const hasData = repositories.length > 0;
+  const [focusedRepoId, setFocusedRepoId] = useState<string | number | null>(null);
 
   const repoIndexes = useMemo(() => {
     const grouped = groupBy(
@@ -45,6 +46,7 @@ export const PullBoard = ({
   }, [repositories]);
 
   const handleRepoNavClick = (repoId: string | number) => {
+    setFocusedRepoId(prev => prev === repoId ? null : repoId);
     const element = document.getElementById("repo-" + repoId);
     if (element) {
       element.scrollIntoView({
@@ -118,7 +120,7 @@ export const PullBoard = ({
                       }
                       key={repo.id}
                       className={clsx(
-                        "text-muted-foreground flex w-full items-center rounded-md border border-transparent py-1 hover:underline",
+                        "text-muted-foreground flex w-full items-center rounded-md border border-transparent py-1 hover:underline cursor-pointer",
                       )}
                     >
                       {repo.name}
@@ -131,7 +133,7 @@ export const PullBoard = ({
         </nav>
         <main>
           {repositories.map((repo) => (
-            <div key={repo.id} className={clsx("mb-12 rounded-md")}>
+            <div key={repo.id} className={clsx("mb-12 rounded-lg p-md ring-2", focusedRepoId === repo.id ? "ring-dark-4": "ring-transparent")}>
               <div className="relative top-[-4.2rem]" id={"repo-" + repo.id} />
               <Repository repo={repo} />
               <div className="mt-3 flex flex-col gap-3">
