@@ -1,4 +1,7 @@
 {
   "cSpell.words": ["groupby", "mantine", "Pulldog", "sonner"],
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  }
 }

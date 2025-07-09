@@ -1,17 +1,11 @@
 "use client";
 
 import { GitPullRequest } from "@/lib/git-provider";
-import {
-  PageColumn,
-  PageContent,
-  PageHeader,
-  PageRoot,
-  PageTitle,
-} from "@/lib/ui/page";
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, Title } from "@mantine/core";
+import { useWindowScroll } from "@mantine/hooks";
 import clsx from "clsx";
 import groupBy from "lodash.groupby";
-import { PawPrint, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FiltersForm } from "./filters-form";
@@ -24,7 +18,9 @@ export const PullBoard = ({
   filters,
 }: BoardData & { filters: BoardFilters }) => {
   const hasData = repositories.length > 0;
-  const [focusedRepoId, setFocusedRepoId] = useState<string | number | null>(null);
+  const [focusedRepoId, setFocusedRepoId] = useState<string | number | null>(
+    null,
+  );
 
   const repoIndexes = useMemo(() => {
     const grouped = groupBy(
@@ -46,7 +42,7 @@ export const PullBoard = ({
   }, [repositories]);
 
   const handleRepoNavClick = (repoId: string | number) => {
-    setFocusedRepoId(prev => prev === repoId ? null : repoId);
+    setFocusedRepoId((prev) => (prev === repoId ? null : repoId));
     const element = document.getElementById("repo-" + repoId);
     if (element) {
       element.scrollIntoView({
@@ -59,48 +55,22 @@ export const PullBoard = ({
 
   if (!hasData) {
     return (
-      <PageRoot>
-        <PageHeader fullWidth className="grid-cols-[auto_1fr_auto] gap-2">
-          <PageColumn element={PawPrint} strokeWidth={3} size={18} />
-          <PageTitle>pulldog</PageTitle>
-          <PageColumn
-            element={ActionIcon}
-            component={Link}
-            href="/settings"
-            variant="subtle"
-            size="xl"
-            color="gray"
-            radius="xl"
-          >
-            <Settings strokeWidth={3} size={18} />
-          </PageColumn>
-        </PageHeader>
-        <PageContent>
-          <NoPullRequests className="ml-2" />
-        </PageContent>
-      </PageRoot>
+      <div>
+        <Header className="sticky top-0 z-10" />
+
+        <div className="mx-auto grid max-w-screen-xl grid-cols-[auto_1fr] gap-6 px-3">
+          <NoPullRequests />
+        </div>
+      </div>
     );
   }
 
   return (
-    <PageRoot>
-      <PageHeader fullWidth className="grid-cols-[auto_1fr_auto] gap-2">
-        <PageColumn element={PawPrint} strokeWidth={3} size={18} />
-        <PageTitle>pulldog</PageTitle>
-        <PageColumn
-          element={ActionIcon}
-          component={Link}
-          href="/settings"
-          variant="subtle"
-          size="xl"
-          color="gray"
-          radius="xl"
-        >
-          <Settings strokeWidth={3} size={18} />
-        </PageColumn>
-      </PageHeader>
-      <PageContent className="mx-auto grid w-full max-w-screen-xl grid-cols-[auto_1fr] gap-3 pr-2.75 pl-1">
-        <nav className="w-70">
+    <div>
+      <Header className="sticky top-0 z-10" />
+
+      <div className="mx-auto grid max-w-screen-xl grid-cols-[auto_1fr] gap-6 px-3">
+        <Sidebar className="max-w-[400px] min-w-[300px] pt-8">
           <FiltersForm initialValues={filters} />
 
           <ul className="mt-8">
@@ -120,7 +90,7 @@ export const PullBoard = ({
                       }
                       key={repo.id}
                       className={clsx(
-                        "text-muted-foreground flex w-full items-center rounded-md border border-transparent py-1 hover:underline cursor-pointer",
+                        "text-muted-foreground flex w-full cursor-pointer items-center rounded-md border border-transparent py-1 hover:underline",
                       )}
                     >
                       {repo.name}
@@ -130,11 +100,18 @@ export const PullBoard = ({
               </div>
             ))}
           </ul>
-        </nav>
-        <main>
+        </Sidebar>
+
+        <Main>
           {repositories.map((repo) => (
-            <div key={repo.id} className={clsx("mb-12 rounded-lg p-md ring-2", focusedRepoId === repo.id ? "ring-dark-4": "ring-transparent")}>
-              <div className="relative top-[-4.2rem]" id={"repo-" + repo.id} />
+            <div
+              key={repo.id}
+              className={clsx(
+                "p-md mb-12 rounded-lg ring-2",
+                focusedRepoId === repo.id ? "ring-dark-4" : "ring-transparent",
+              )}
+            >
+              <div className="relative scroll-mt-24" id={"repo-" + repo.id} />
               <Repository repo={repo} />
               <div className="mt-3 flex flex-col gap-3">
                 {repo.pulls && repo.pulls.length > 0 ? (
@@ -147,8 +124,60 @@ export const PullBoard = ({
               </div>
             </div>
           ))}
-        </main>
-      </PageContent>
-    </PageRoot>
+        </Main>
+      </div>
+    </div>
   );
 };
+
+function Header({ className }: { className?: string }) {
+  const [scroll] = useWindowScroll();
+
+  const isOnTop = useMemo(() => scroll.y === 0, [scroll]);
+
+  return (
+    <header
+      className={clsx(
+        "h-14 backdrop-blur-sm",
+        !isOnTop && "border-b border-white/5 shadow-md",
+        className,
+      )}
+    >
+      <div className="mx-auto flex max-w-screen-2xl flex-row items-center justify-between px-3 py-2">
+        <Title order={4}>pulldog</Title>
+        <ActionIcon
+          component={Link}
+          href="/settings"
+          variant="subtle"
+          size="xl"
+        >
+          <Settings strokeWidth={3} size={18} />
+        </ActionIcon>
+      </div>
+    </header>
+  );
+}
+
+function Sidebar({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className={clsx("sticky top-14 block self-start pt-4", className)}>
+      {children}
+    </div>
+  );
+}
+
+function Main({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  return <main className={clsx("pt-4", className)}>{children}</main>;
+}

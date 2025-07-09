@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
+import ReactQueryProvider from "@/lib/react-query/react-query-provider";
+import { defaultColorScheme, fontMono, fontSans, theme } from "@/theme";
 import {
   ColorSchemeScript,
   mantineHtmlProps,
   MantineProvider,
-  ScrollArea,
 } from "@mantine/core";
 import clsx from "clsx";
-import { defaultColorScheme, fontMono, fontSans, theme } from "@/theme";
-import ReactQueryProvider from "@/lib/react-query/react-query-provider";
+import type { Metadata } from "next";
 
 import "./globals.css";
 
@@ -38,7 +37,7 @@ export default function RootLayout({
             defaultColorScheme={defaultColorScheme}
             theme={theme}
           >
-            <ScrollArea className="h-screen">{children}</ScrollArea>
+            {children}
           </MantineProvider>
         </ReactQueryProvider>
       </body>

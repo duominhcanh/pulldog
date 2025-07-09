@@ -17,8 +17,8 @@ type AccountProps = AccountFormValues & {
 } & GitUser;
 
 export {
-  type AccountFormValues,
-  type AccountProps,
   accountFormSchema,
   accountsCookieSchema,
+  type AccountFormValues,
+  type AccountProps,
 };
